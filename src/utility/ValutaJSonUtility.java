@@ -10,7 +10,7 @@ import domen.Valuta;
 
 public class ValutaJSonUtility {
 
-	public JsonObject serializeValuta(LinkedList<Valuta> valute, GregorianCalendar datum){
+	public static JsonObject serializeValuta(LinkedList<Valuta> valute, GregorianCalendar datum){
 		String dat = ""+datum.get(GregorianCalendar.DAY_OF_MONTH)+"."+(datum.get(GregorianCalendar.MONTH)+1)+"."+ datum.get(GregorianCalendar.YEAR)+".";
 		
 		JsonObject kurseviJson = new JsonObject();

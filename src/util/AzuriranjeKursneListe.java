@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
+import utility.ValutaJSonUtility;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -55,11 +57,10 @@ public class AzuriranjeKursneListe {
 	public void upisiValute(LinkedList<Valuta> valute, GregorianCalendar datum) {
 		
 		try {
-			FileWriter out =new FileWriter(putanjaDoFajlaKursnaLista);
-			
+			FileWriter out=new FileWriter(putanjaDoFajlaKursnaLista);
 			Gson gson=new GsonBuilder().setPrettyPrinting().create();
-			JsonObject jobj = gson.toJson(out, JsonObject.class);
-			out.write(gson.toJson());
+			JsonObject mJson=ValutaJSonUtility.serializeValuta(valute, datum);
+			out.write(gson.toJson(mJson));
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
