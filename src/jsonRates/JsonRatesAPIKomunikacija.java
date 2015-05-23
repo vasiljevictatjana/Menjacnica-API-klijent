@@ -9,11 +9,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import domen.Valuta;
 
 public class JsonRatesAPIKomunikacija {
 	
-	public LinkedList<Valuta> vratiIznosKurseva (String[] valute){
+	public static LinkedList<Valuta> vratiIznosKurseva (String[] valute){
 		
 		LinkedList<Valuta> val = new LinkedList<Valuta>();
 		

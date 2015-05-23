@@ -7,28 +7,49 @@ import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import jsonRates.JsonRatesAPIKomunikacija;
 import domen.Valuta;
 
 public class AzuriranjeKursneListe {
 	
 	final String putanjaDoFajlaKursnaLista = "data/kursnaLista.json";
-	
+
+
 	public LinkedList<Valuta> ucitajValute(){
 		
 		try {
-			FileReader reader = new FileReader(putanjaDoFajlaKursnaLista);
+			FileReader in = new FileReader(putanjaDoFajlaKursnaLista);
 			
 			Gson gson = new GsonBuilder().create();
-			JsonObject jobj = gson.fromJson(reader, JsonObject.class);
-			JsonArray jarr = jobj.get("valute").getAsJsonArray();
+			JsonObject jsobject = gson.fromJson(in, JsonObject.class);
+			JsonArray jsarray = jsobject.get("valute").getAsJsonArray();
 			
-			return parseValute(jarr);
+			return parseValute(jsarray);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		return null;
+	}
+	
+	public LinkedList<Valuta> parseValute(JsonArray valuteJsArray) {
+		LinkedList<Valuta> valute = new LinkedList<Valuta>();
+		
+		for (int i = 0; i < valuteJsArray.size(); i++) {
+			JsonObject valutaJs = (JsonObject) valuteJsArray.get(i);
+			
+			Valuta valuta = new Valuta();
+			valuta.setNaziv(valutaJs.get("naziv").getAsString());
+			valuta.setKurs(valutaJs.get("kurs").getAsDouble());
+			
+			valute.add(valuta);
+		}
+		
+		return valute;
 	}
 
 	public void upisiValute(LinkedList<Valuta> valute, GregorianCalendar datum) {
@@ -49,14 +70,13 @@ public class AzuriranjeKursneListe {
 		
 		LinkedList<Valuta> valute=ucitajValute();
 		
-		String[] v=new String[valute.size()];
+		String[] valuta=new String[valute.size()];
 		
-		for (int i = 0; i < v.length; i++) {
-			v[i]=valute.get(i).getNaziv();
+		for (int i = 0; i < valuta.length; i++) {
+			valuta[i]=valute.get(i).getNaziv();
 		}
 		
-		JsonRatesAPIKomunikacija j=new JsonRatesAPIKomunikacija();
-		valute=j.vratiIznosKurseva(v);
-		upisiValute(valute,new GregorianCalendar());
+		valute = JsonRatesAPIKomunikacija.vratiIznosKurseva(valuta);
+		upisiValute(valute, new GregorianCalendar());
 	}
 }
